@@ -1,0 +1,19 @@
+{
+  "name": "chimera",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev:server": "cd server && pnpm run dev",
+    "dev:web": "cd web && pnpm run dev",
+    "dev": "concurrently \"pnpm run dev:server\" \"pnpm run dev:web\""
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "concurrently": "^9.2.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184"
+}

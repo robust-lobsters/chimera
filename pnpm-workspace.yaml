@@ -1,0 +1,4 @@
+packages:
+  - '_shared'
+  - 'server'
+  - 'web'

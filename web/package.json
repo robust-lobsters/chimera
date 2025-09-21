@@ -1,0 +1,37 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@frfla/react-hooks": "^0.250831.0",
+    "dayjs": "^1.11.18",
+    "emotion-normalize": "^11.0.1",
+    "@chimera/shared": "workspace:*",
+    "jotai": "^2.14.0",
+    "lucide-react": "^0.542.0",
+    "overlay-kit": "^1.8.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router": "^7.8.2",
+    "swr": "^2.3.6",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.6",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react-swc": "^4.0.0",
+    "globals": "^16.3.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.39.1",
+    "vite": "^7.1.2"
+  }
+}

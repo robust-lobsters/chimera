@@ -1,0 +1,17 @@
+{
+  "name": "@chimera/shared",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
