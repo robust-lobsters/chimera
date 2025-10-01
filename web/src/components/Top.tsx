@@ -9,29 +9,26 @@ import { TopBar } from './TopBar'
  * @prop `(title)` 한 줄을 권장하며, 두 줄까지 허용합니다
  * @prop `(subtitle)` 두 줄까지 허용합니다
  */
-export function Top({ icon, title, subtitle }: { icon?: string; title?: ReactNode; subtitle?: ReactNode }) {
+export function Top({ icon, title, subtitle, nav }: { icon?: string; title?: ReactNode; subtitle?: ReactNode; nav?: boolean }) {
   return (
     <div
       css={css`
         padding-top: 1rem;
         padding-inline: 1.5rem;
         @media screen and (min-width: 600px) {
-          margin-left: 3.15rem;
+          margin-inline: 3.15rem;
         }
-      `}
-    >
-      <TopBar />
+      `}>
+      {nav && <TopBar />}
       <Divider size={1} />
       <div
         css={css`
           margin-bottom: 0.5rem;
-        `}
-      >
+        `}>
         <span
           css={css`
             font-size: 2.5rem;
-          `}
-        >
+          `}>
           {icon}
         </span>
       </div>
@@ -41,8 +38,7 @@ export function Top({ icon, title, subtitle }: { icon?: string; title?: ReactNod
           font-size: 1.65rem;
           font-weight: 600;
           line-height: 1.3;
-        `}
-      >
+        `}>
         {title}
       </h1>
 
@@ -53,8 +49,7 @@ export function Top({ icon, title, subtitle }: { icon?: string; title?: ReactNod
               display: block;
               font-size: 1rem;
               margin-top: 0.35rem;
-            `}
-          >
+            `}>
             {subtitle}
           </Caption>
         </div>

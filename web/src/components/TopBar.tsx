@@ -1,10 +1,11 @@
 import { css } from '@emotion/react'
 import { ChevronLeft } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import { BaseBtn } from './Btn'
 
 export function TopBar() {
-  const { '*': catchAll } = useParams()
+  const path = window.location.pathname
+  const isHome = path === '/' || path === ''
   const navigate = useNavigate()
 
   return (
@@ -16,16 +17,14 @@ export function TopBar() {
           display: flex;
           justify-content: space-between;
           align-items: center;
-        `}
-      >
-        {!catchAll ? (
+        `}>
+        {!isHome ? (
           <div
             css={css`
               display: flex;
               gap: 0.5rem;
               align-items: center;
-            `}
-          >
+            `}>
             <BaseBtn
               onClick={() => navigate('/')}
               css={css`
@@ -36,8 +35,7 @@ export function TopBar() {
                 color: slategrey;
                 width: 1.5rem;
                 height: 1.5rem;
-              `}
-            >
+              `}>
               <ChevronLeft size={24} />
             </BaseBtn>
           </div>
