@@ -24,18 +24,15 @@ export function FixedCTA(props: CTAProps) {
     <div
       css={css`
         z-index: 99;
-        position: fixed;
+        position: absolute;
         padding-bottom: env(safe-area-inset-bottom);
         bottom: 4rem;
-        padding-left: 1.5rem;
-        width: calc(100% - 1.5rem);
+        width: calc(100% - 3rem);
         @media screen and (min-width: 600px) {
-          padding-left: 4.5rem;
-          bottom: 2rem;
-          width: calc(100% - 1.65rem);
+          margin-right: 3.15rem;
+          width: calc(100% - 9.15rem);
         }
-      `}
-    >
+      `}>
       {(() => {
         switch (props.gridType) {
           case '1Col': {
@@ -52,8 +49,7 @@ export function FixedCTA(props: CTAProps) {
                   display: grid;
                   grid-template-columns: 1fr 1fr;
                   gap: 0.5rem;
-                `}
-              >
+                `}>
                 <CancelBtn onClick={props.onCancel}>{props.cancelTxt}</CancelBtn>
                 <BaseBtn {...props} onClick={props.onConfirm}>
                   {props.confirmTxt}
@@ -68,8 +64,7 @@ export function FixedCTA(props: CTAProps) {
                   display: grid;
                   grid-template-columns: 2fr 3fr;
                   gap: 0.5rem;
-                `}
-              >
+                `}>
                 <CancelBtn onClick={props.onCancel}>{props.cancelTxt}</CancelBtn>
                 <BaseBtn {...props} onClick={props.onConfirm}>
                   {props.confirmTxt}
