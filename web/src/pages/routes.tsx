@@ -1,9 +1,9 @@
 import { Navigation } from 'components/Navigation'
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router'
 import { CustomsPage } from './customs/page'
-import { IssuePage } from './issues/page'
 import { StartPage } from './page'
 import { Providers } from './providers'
+import { RssSubsPage } from './rss-subs/page'
 
 const r = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ const r = createBrowserRouter([
         path: '/',
         element: <StartPage />,
       },
-      { path: '/issues', element: <IssuePage /> },
+      { path: '/rss-subs', element: <RssSubsPage /> },
       { path: '/customs', element: <CustomsPage /> },
       { path: '*', element: <Navigate to="/" replace={true} /> },
     ],

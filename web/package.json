@@ -10,14 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chimera/shared": "workspace:*",
     "@emotion/react": "^11.14.0",
     "@frfla/react-hooks": "^0.250831.0",
     "dayjs": "^1.11.18",
     "emotion-normalize": "^11.0.1",
-    "@chimera/shared": "workspace:*",
     "jotai": "^2.14.0",
     "lucide-react": "^0.542.0",
     "overlay-kit": "^1.8.5",
+    "p-map": "^7.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router": "^7.8.2",
