@@ -3,7 +3,7 @@ import { type ComponentProps, type PointerEvent, useEffect, useMemo, useRef, use
 import { clamp } from '@chimera/shared'
 
 interface Props extends ComponentProps<'div'> {
-  unmount: () => void
+  unmount: (...param: any) => void
   size: 'full' | 'half'
 }
 
@@ -18,19 +18,12 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
   const isDraggingRef = useRef(false)
   const startYRef = useRef(0)
   const startPosRef = useRef(0)
+  const hasDraggedRef = useRef(false)
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setPos(openSnap))
     return () => cancelAnimationFrame(id)
   }, [openSnap])
-
-  const handlePointerDown = (e: PointerEvent) => {
-    setDragging(true)
-    isDraggingRef.current = true
-    startYRef.current = e.clientY
-    startPosRef.current = pos
-    e.currentTarget.setPointerCapture(e.pointerId)
-  }
 
   const handlePointerUp = () => {
     if (!isDraggingRef.current) return
@@ -41,7 +34,33 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
 
     if (snapped === 0) {
       setPos(0)
-      unmount()
+      setTimeout(() => {
+        unmount()
+      }, 150)
+      return
+    }
+    setPos(snapped)
+  }
+
+  const handleHandlePointerUp = () => {
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
+    setDragging(false)
+
+    if (!hasDraggedRef.current) {
+      // 핸들을 드래그하지 않고 단순 클릭한 경우
+      setPos(0)
+      setTimeout(() => unmount(), 150)
+      return
+    }
+
+    const snapped = SNAP_POINTS.reduce((acc, s) => (Math.abs(s - pos) < Math.abs(acc - pos) ? s : acc), SNAP_POINTS[0])
+
+    if (snapped === 0) {
+      setPos(0)
+      setTimeout(() => {
+        unmount()
+      }, 150)
       return
     }
     setPos(snapped)
@@ -49,8 +68,13 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
 
   const handlePointerMove = (e: PointerEvent) => {
     if (!isDraggingRef.current) return
+
+    const dy = Math.abs(e.clientY - startYRef.current)
+    if (dy > 5) {
+      hasDraggedRef.current = true
+    }
+
     const h = sheetRef.current?.getBoundingClientRect().height ?? 1
-    const dy = e.clientY - startYRef.current
     const delta = -(dy / h)
     setPos(() => clamp(0, startPosRef.current + delta, 1))
   }
@@ -61,11 +85,25 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
     const snapped = SNAP_POINTS.reduce((acc, s) => (Math.abs(s - pos) < Math.abs(acc - pos) ? s : acc), SNAP_POINTS[0])
     if (snapped === 0) {
       setPos(0)
-      unmount()
+      setTimeout(() => {
+        console.log('unmount called from handlePointerCancel')
+        unmount()
+      }, 150)
     } else {
       setPos(snapped)
     }
   }
+
+  const handleHandlePointerDown = (e: PointerEvent) => {
+    setDragging(true)
+    isDraggingRef.current = true
+    hasDraggedRef.current = false
+    startYRef.current = e.clientY
+    startPosRef.current = pos
+    e.currentTarget.setPointerCapture(e.pointerId)
+    e.stopPropagation()
+  }
+
 
   return (
     <div
@@ -73,9 +111,8 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
         z-index: 9999;
         position: fixed;
         inset: 0;
-        pointer-events: none;
-        visibility: ${pos === 0 ? 'visible' : 'hidden'};
-        pointer-events: ${pos === 0 ? 'auto' : 'none'};
+        visibility: ${pos > 0 ? 'visible' : 'hidden'};
+        pointer-events: ${pos > 0 ? 'auto' : 'none'};
       `}>
       <div
         css={css`
@@ -84,11 +121,12 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
           background: rgba(0, 0, 0, 0.35);
           transition: opacity 150ms ease;
           pointer-events: auto;
-          opacity: ${pos};
+          opacity: ${pos === 0 ? 0 : 1};
         `}
-        onClick={() => {
+        onClick={e => {
+          if (e.target !== e.currentTarget) return
           setPos(0)
-          unmount()
+          setTimeout(() => unmount(), 150)
         }}
         aria-hidden>
         <div
@@ -100,9 +138,9 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
             position: absolute;
             left: 0;
             right: 0;
-            top: 1.5rem;
+            bottom: 0;
             margin: 0;
-            height: calc(100dvh);
+            height: ${size === 'full' ? 85 : 60}dvh;
             background: #fff;
             border-top-left-radius: 0.6rem;
             border-top-right-radius: 0.6rem;
@@ -110,8 +148,9 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
             display: flex;
             flex-direction: column;
             padding-bottom: env(safe-area-inset-bottom);
+            touch-action: none;
             @media screen and (min-width: 600px) {
-              height: calc(100dvh);
+              height: ${size === 'full' ? 100 : 75}dvh;
             }
           `}
           onPointerMove={handlePointerMove}
@@ -129,7 +168,8 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
                 touch-action: none;
                 cursor: grab;
               `}
-              onPointerDown={handlePointerDown}
+              onPointerDown={handleHandlePointerDown}
+              onPointerUp={handleHandlePointerUp}
               aria-label="바텀시트 핸들">
               <span
                 css={css`
@@ -147,7 +187,8 @@ export function BottomSheet({ size, unmount, ...props }: Props) {
             </button>
             <div
               css={css`
-                padding: 1.5rem;
+                pointer-events: auto;
+                touch-action: auto;
               `}>
               {props.children}
             </div>
